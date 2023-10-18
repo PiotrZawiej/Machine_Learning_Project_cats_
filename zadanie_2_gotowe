@@ -52,6 +52,7 @@ def astar(start, end):
     closed_list = set()
 
     while open_list:
+    
         current = min(open_list, key=lambda point: f_score[point])
 
         if current == end:
@@ -76,6 +77,10 @@ def astar(start, end):
                 g_score[neighbor] = tentative_g_score
                 f_score[neighbor] = g_score[neighbor] + heuristic(neighbor)
                 open_list[neighbor] = f_score[neighbor]
+
+
+        return None
+
 
     return None
 
@@ -116,23 +121,13 @@ print(f"({start_point.x}, {start_point.y})")
 print("Punkt końcowy: ")
 print(f"({end_point.x}, {end_point.y})")
 
-
-file_name = "Wynik.txt"
-
-def save_data_to_file(file_name, start_point, end_point, num_points_n, k, path):
-    with open(file_name, 'w') as file:
-        file.write(f'Punkt początkowy: {start_point.x}, {start_point.y}\n')
-        file.write(f'Punkt końcowy: {end_point.x}, {end_point.y}\n')
-        file.write(f'Liczba punktów n: {num_points_n}\n')
-        file.write(f'Liczba punktów k: {k}\n')
-        if path:
-            path_str = ';'.join([f'{point.x}{point.y}' for point in path])
-            file.write(f'Scieżka: {path_str}\n')
-        else:
-            file.write('Scieżka: Brak dostępnej ścieżki\n')
-
-# Wywołanie funkcji, aby zapisać dane do pliku
-
-path = find_optimal_path(start_point, end_point, points_to_visit)
-save_data_to_file(file_name, start_point, end_point, num_points_n, k, path)
+file_name = open("Wynik.csv","w")
+file_name.write(f'Punkt poczatkowy: {start_point.x}, {start_point.y}\n')
+file_name.write(f'Punkt koncowy: {end_point.x}, {end_point.y}\n')
+file_name.write(f'Liczba punktow n: {num_points_n}\n')
+file_name.write(f'Liczba punktow k: {k}\n')
+file_name.write(f"Punkty do odiwedzenia: \n")
+for points in points_to_visit:
+    file_name.write(f"{point.x},{point.y};")
+file_name.close()
 
