@@ -1,0 +1,138 @@
+import random
+import math
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+board_width = 5000
+board_height = 5000
+
+def random_point(width, height):
+    return Point(random.randint(0, width - 1), random.randint(0, height - 1))
+
+start_point = random_point(board_width, board_height)
+end_point = random_point(board_width, board_height)
+
+num_points_n = random.randint(1, 4999)
+points_n = [random_point(board_width, board_height) for _ in range(num_points_n)]
+
+
+
+def distance(point1, point2):
+    return math.sqrt((point1.x - point2.x) ** 2 + (point1.y - point2.y) ** 2)
+
+def heuristic(point):
+    return distance(point, end_point)
+
+def get_neighbors(point):
+    neighbors = []
+    if point.x > 0:
+        neighbors.append(Point(point.x - 1, point.y))
+    if point.x < board_width - 1:
+        neighbors.append(Point(point.x + 1, point.y))
+    if point.y > 0:
+        neighbors.append(Point(point.x, point.y - 1))
+    if point.y < board_height - 1:
+        neighbors.append(Point(point.x, point.y + 1))
+    return neighbors
+
+def astar(start, end):
+    open_list = {start: 0}
+    came_from = {}
+    g_score = {start: 0}
+    f_score = {start: heuristic(start)}
+    closed_list = set()
+
+    while open_list:
+        current = min(open_list, key=lambda point: f_score[point])
+
+        if current == end:
+            path = [current]
+            while current in came_from:
+                current = came_from[current]
+                path.append(current)
+            path.reverse()
+            return path
+
+        del open_list[current]
+        closed_list.add(current)
+
+        for neighbor in get_neighbors(current):
+            if neighbor in closed_list:
+                continue
+
+            tentative_g_score = g_score[current] + distance(current, neighbor)
+
+            if neighbor not in open_list or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor)
+                open_list[neighbor] = f_score[neighbor]
+
+    return None
+
+def find_optimal_path(start, end, points_to_visit):
+    path = []
+    current_point = start
+    for point_to_visit in points_to_visit:
+        result = astar(current_point, point_to_visit)
+        if result:
+            path.extend(result[:-1])
+            current_point = result[-1]
+        else:
+            return None
+    last_leg = astar(current_point, end, points_to_visit)
+    if last_leg:
+        path.extend(last_leg)
+        return path
+    return None
+
+
+k = random.randint(1, num_points_n)
+points_to_visit = points_n[:k]
+
+
+#print("Punkty n:")
+#for point in points_n:
+#    print(f"({point.x}, {point.y})")
+print("Punkty do odwiedzenia:")
+for point in points_to_visit:
+    print(f"({point.x}, {point.y})")
+
+print(f"Liczba punktów k: {k}")
+print(f"Liczba punktów n: {num_points_n}")
+
+print("Punkt początkowy: ")
+print(f"({start_point.x}, {start_point.y})")
+
+print("Punkt końcowy: ")
+print(f"({end_point.x}, {end_point.y})")
+
+
+file_name = "Wynik.txt"
+
+def save_data_to_file(file_name, start_point, end_point, num_points_n, k, path):
+    with open(file_name, 'w') as file:
+        file.write(f'Punkt początkowy: {start_point.x}, {start_point.y}\n')
+        file.write(f'Punkt końcowy: {end_point.x}, {end_point.y}\n')
+        file.write(f'Liczba punktów n: {num_points_n}\n')
+        file.write(f'Liczba punktów k: {k}\n')
+        if path:
+            path_str = ';'.join([f'{point.x}{point.y}' for point in path])
+            file.write(f'Scieżka: {path_str}\n')
+        else:
+            file.write('Scieżka: Brak dostępnej ścieżki\n')
+
+# Wywołanie funkcji, aby zapisać dane do pliku
+
+path = find_optimal_path(start_point, end_point, points_to_visit)
+save_data_to_file(file_name, start_point, end_point, num_points_n, k, path)
+
