@@ -1,6 +1,7 @@
 import random
 import math
 
+# Stworzeniu punktów
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -11,27 +12,34 @@ class Point:
 
     def __hash__(self):
         return hash((self.x, self.y))
-
+# Wymiary planszy
 board_width = 5000
 board_height = 5000
 
+#Tworzenie randomowychpunktów na planszy
 def random_point(width, height):
     return Point(random.randint(0, width - 1), random.randint(0, height - 1))
 
+#Początkowy i końcowy punkt
 start_point = random_point(board_width, board_height)
 end_point = random_point(board_width, board_height)
 
+#Liczba punktów
 num_points_n = random.randint(1, 4999)
 points_n = [random_point(board_width, board_height) for _ in range(num_points_n)]
 
+# Losowanie punktów k
+k = random.randint(1, num_points_n)
+points_to_visit = points_n[:k]
 
-
+#Obliczanie dystansu przez pitagorasa
 def distance(point1, point2):
     return math.sqrt((point1.x - point2.x) ** 2 + (point1.y - point2.y) ** 2)
-
+#Dla Astar do szacowania długości między punktami
 def heuristic(point):
     return distance(point, end_point)
 
+#Znajdowanie sąsiadów dla punktów
 def get_neighbors(point):
     neighbors = []
     if point.x > 0:
@@ -44,6 +52,7 @@ def get_neighbors(point):
         neighbors.append(Point(point.x, point.y + 1))
     return neighbors
 
+#Algorytm Astar
 def astar(start, end):
     open_list = {start: 0}
     came_from = {}
@@ -84,10 +93,12 @@ def astar(start, end):
 
     return None
 
+#Znajdywanie ścieżki dla punktów wylosowanych.
 def find_optimal_path(start, end, points_to_visit):
     path = []
     current_point = start
     for point_to_visit in points_to_visit:
+        #Tutaj wywoływany jest Astar dla punktów do odiwedzenia
         result = astar(current_point, point_to_visit)
         if result:
             path.extend(result[:-1])
@@ -101,9 +112,7 @@ def find_optimal_path(start, end, points_to_visit):
     return None
 
 
-k = random.randint(1, num_points_n)
-points_to_visit = points_n[:k]
-
+#Wypisanie na konsoli
 
 #print("Punkty n:")
 #for point in points_n:
@@ -121,6 +130,7 @@ print(f"({start_point.x}, {start_point.y})")
 print("Punkt końcowy: ")
 print(f"({end_point.x}, {end_point.y})")
 
+#Zapisywanie do pliku
 file_name = open("Wynik.csv","w")
 file_name.write(f'Punkt poczatkowy: {start_point.x}, {start_point.y}\n')
 file_name.write(f'Punkt koncowy: {end_point.x}, {end_point.y}\n')
