@@ -148,7 +148,7 @@ for i in range(len(points_to_visit_int) - 1):
 print(f"Łączna odległość między punktami: {total_distance}")
 
 #Zapisywanie do pliku
-file_name = open("Wynik.csv","w")
+file_name = open("Zad2/Wynik.csv","w")
 file_name.write(f'Punkt poczatkowy: {start_point.x}, {start_point.y}\n')
 file_name.write(f'Punkt koncowy: {end_point.x}, {end_point.y}\n')
 file_name.write(f'Liczba punktow n: {num_points_n}\n')
