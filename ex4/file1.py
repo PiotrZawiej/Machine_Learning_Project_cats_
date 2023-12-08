@@ -23,4 +23,8 @@ Luna = cat("Luna", "snail")
 Ariana = cat("Ariana", "rock")
 Dante = cat("Dante", "mouse")
 
+print(Luna)
+print(Ariana)
+print(Dante)
+
 arr[int(len(arr)/2), int(len(arr[0])/2)] = "Luna"
