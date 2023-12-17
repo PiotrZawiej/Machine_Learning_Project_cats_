@@ -25,3 +25,19 @@ def map_generator(map_size, objects):
             arr[rand_x, rand_y] = item
             
     return arr
+
+def calculate_distance(point1, point2):
+    return np.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
+
+def Hunting(cat_name, fav_objects, arr):
+    center_x, center_y = (len(arr[0]) // 2, len(arr[0]) // 2)
+    arr[center_x,center_y] = cat_name
+    
+    item_location = np.argwhere(arr == fav_objects[0])
+    
+    distance = calculate_distance(arr[center_x,center_y], item_location[0])
+                
+    return distance
+    
+    
+    
