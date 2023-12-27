@@ -14,7 +14,8 @@ class Kot:
 tablica_obiektow = []
 k=0
 tablesize=5000
-chunksize=2500
+chunksize=1250
+chunk_width=tablesize/chunksize
 
 '''
 Luna = mysze = "M" = 1
@@ -126,8 +127,26 @@ for i in range(len(tablica_kotow)):
 #przypisywanie kolejnych chunkow
 keep_looping=True
 #while(keep_looping):
-
     
 
+for i in tablica_kotow:
+    for x in i.lista_posiadanych_chunkow:
+        #chunk wyzej
+        if x-chunk_width >= 0:
+            i.lista_chunkow_do_wyboru.append(int(x-chunk_width))
+        #chunk nizej
+        if x+chunk_width <= chunk_width*chunk_width:
+            i.lista_chunkow_do_wyboru.append(int(x+chunk_width))
+        #chunk na lewo
+        if  int((x-1) / chunk_width) == int(x / chunk_width) and x-1 >=0:
+            i.lista_chunkow_do_wyboru.append(x-1)
+        #chunk na prawo
+        if  int((x+1) / chunk_width) == int(x / chunk_width) and x+1 <= chunk_width*chunk_width:
+            i.lista_chunkow_do_wyboru.append(x+1)
 
+            
+    i.lista_chunkow_do_wyboru = list(set(i.lista_chunkow_do_wyboru))
+    
+for i in tablica_kotow:
+    print(i.lista_chunkow_do_wyboru)
 
