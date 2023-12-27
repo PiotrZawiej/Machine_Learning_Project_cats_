@@ -1,10 +1,11 @@
 import random
 
 class Kot:
-    index_preferowanego_biektu = -1
     zdobyte_punkty=0
     lista_posiadanych_chunkow=[]
     lista_chunkow_do_wyboru=[]
+
+    
 
 
 
@@ -20,11 +21,22 @@ Dante = kamyki i liscie= "K" = 2
 Ariana = slimaki = "S" = 3
 '''
 tablica_obiektow.append([1,1,"K"])
+
+tablica_obiektow.append([2000,3000,"S"])
+
+tablica_obiektow.append([3000,2000,"S"])
+
 tablica_obiektow.append([5000,5000,"K"])
 tablica_obiektow.append([5000,5000,"K"])
 tablica_obiektow.append([5000,5000,"K"])
 tablica_obiektow.append([5000,5000,"K"])
-tablica_obiektow.append([5000,5000,"K"])
+
+tablica_obiektow.append([5000,5000,"M"])
+tablica_obiektow.append([5000,5000,"M"])
+tablica_obiektow.append([5000,5000,"M"])
+tablica_obiektow.append([5000,5000,"M"])
+tablica_obiektow.append([5000,5000,"M"])
+tablica_obiektow.append([5000,5000,"M"])
 
 #tworzenie tablicy z losowymi obiektami w losowych punktach 5000x5000 + obiekt ktory tam sie znajduje
 for i in range(k):
@@ -44,8 +56,8 @@ for i in range(k):
 #dzielenie tablicy glownej na mniejsze kwadraty, chunk
 tablica_chunkow = []
 
-for x in range(int(tablesize/chunksize)):
-    for y in range(int(tablesize/chunksize)):
+for y in range(int(tablesize/chunksize)):
+    for x in range(int(tablesize/chunksize)):
 
         M=0
         K=0
@@ -67,21 +79,46 @@ for x in range(int(tablesize/chunksize)):
 
         tablica_chunkow.append([M,K,S])
 
-
+#print(tablica_chunkow)
 '''
 -=inicjalizacja kotow + koty wybieraja najlepsza pozycje startowa=-
 '''
-Luna=Kot
-Dante=Kot
-Ariana= Kot
-Luna.index_preferowanego_biektu=1
-Dante.index_preferowanego_biektu =2
-Ariana.index_preferowanego_biektu=3
-    
+Luna=Kot()
+Dante=Kot()
+Ariana= Kot()
 tablica_kotow =[Luna,Dante,Ariana]
-
-print(tablica_chunkow)
 
 '''
 -=algorytm sprawdzania dostepnych kratek + przypisanie kratki kotu=-
 '''
+#wybur chunka dla kazdego kota bez powturzen
+
+top_3_values = []
+for i in range(len(tablica_chunkow[0])):
+    # Sort the list_of_lists based on the values at the current index
+    sorted_lists = sorted(enumerate(tablica_chunkow), key=lambda x: x[1][i], reverse=True)
+
+    # Extract the 3 biggest values and their indexes
+    top_3_values.append([(value[i], index) for index, value in sorted_lists[:3]]) 
+
+offset_pozycji=[0,0,0]
+for i in range(len(tablica_kotow)):
+    for j in range(len(tablica_kotow)):
+
+        #jezeli indeksy maja konflikty
+        if j!= i and top_3_values[i][0+offset_pozycji[i]][1] == top_3_values[j][0+offset_pozycji[j]][1] :
+            
+            #mniejsza wartosc pod indeksem dostaje offset
+            if top_3_values[i][0+offset_pozycji[i]][0] >= top_3_values[j][0+offset_pozycji[j]][0]:
+                offset_pozycji[j]+=1
+            else:
+                offset_pozycji[i]+=1
+
+#wpisanie chunka startowego
+for i in range(len(tablica_kotow)):
+    tablica_kotow[i].lista_posiadanych_chunkow.append(top_3_values[i][0+offset_pozycji[i]][1])
+
+          
+
+
+
