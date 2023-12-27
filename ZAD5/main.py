@@ -1,9 +1,10 @@
 import random
 
 class Kot:
-    zdobyte_punkty=0
-    lista_posiadanych_chunkow=[]
-    lista_chunkow_do_wyboru=[]
+    def __init__(self):
+            self.zdobyte_punkty = 0
+            self.lista_posiadanych_chunkow = []  # Initialize the list in __init__
+            self.lista_chunkow_do_wyboru = []
 
     
 
@@ -106,19 +107,27 @@ for i in range(len(tablica_kotow)):
     for j in range(len(tablica_kotow)):
 
         #jezeli indeksy maja konflikty
-        if j!= i and top_3_values[i][0+offset_pozycji[i]][1] == top_3_values[j][0+offset_pozycji[j]][1] :
+        if j!= i and top_3_values[i][offset_pozycji[i]][1] == top_3_values[j][offset_pozycji[j]][1] :
             
             #mniejsza wartosc pod indeksem dostaje offset
-            if top_3_values[i][0+offset_pozycji[i]][0] >= top_3_values[j][0+offset_pozycji[j]][0]:
+            if top_3_values[i][offset_pozycji[i]][0] >= top_3_values[j][offset_pozycji[j]][0]:
                 offset_pozycji[j]+=1
             else:
                 offset_pozycji[i]+=1
 
 #wpisanie chunka startowego
 for i in range(len(tablica_kotow)):
-    tablica_kotow[i].lista_posiadanych_chunkow.append(top_3_values[i][0+offset_pozycji[i]][1])
+    tmp = top_3_values[i][offset_pozycji[i]][1]
+    tablica_kotow[i].lista_posiadanych_chunkow.append(tmp)
 
-          
+
+
+
+#przypisywanie kolejnych chunkow
+keep_looping=True
+#while(keep_looping):
+
+    
 
 
 
