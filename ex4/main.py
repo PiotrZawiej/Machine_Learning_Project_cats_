@@ -21,10 +21,11 @@ objects = {"rock":20,"snail":9, "mouse":8, "leaf":30, "fildmouse":15}
 
 
 arr = map_generator(50, objects)
+visited_paths = []
 
 for cat_name in cats:
     cat_instance = next(cat for cat in [Luna, Ariana, Dante] if cat.name == cat_name)
-    Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object])
+    Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object], visited_paths)
 
 
     

@@ -30,7 +30,7 @@ def map_generator(map_size, objects):
 def calculate_distance(point1, point2):
     return np.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
 
-def Hunting(cat_name, fav_objects, arr, reamining_objects):
+def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths):
     # Set the initial position of the cat at the center of the map
     center_x, center_y = (len(arr[0]) // 2, len(arr[0]) // 2)
     arr[center_x, center_y] = cat_name
@@ -52,6 +52,8 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects):
     # Search for the preferred objects using BFS
     while objects_score < reamining_objects and time > 0 and not q.empty():
         current_location = q.get()
+        
+        current_path = [current_location]
 
         # Iterate over neighbors (up, down, left, right)
         for neighbor in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
@@ -83,6 +85,18 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects):
 
                 q.put(new_location)
                 visited[new_location[0], new_location[1]] = True
+                
+                can_move = True
+                for visited_path in visited_paths:
+                    if new_location in visited_path:
+                        can_move = False
+                        break
+
+                if can_move:
+                    current_path.append(new_location)
+                    visited_paths.append(current_path)
+                else:
+                    continue
                 
                 if objects_collected == 5:
                     # Cat returns home after collecting 5 objects
