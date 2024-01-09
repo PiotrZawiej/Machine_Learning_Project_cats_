@@ -9,6 +9,7 @@ from catClass import cat
 from mapGeneratorFunction import map_generator
 from mapGeneratorFunction import Hunting
 import numpy as np
+from queue import Queue
 
 
 
@@ -24,8 +25,18 @@ arr = map_generator(50, objects)
 visited_paths = []
 
 for cat_name in cats:
+    # Zresetuj stan dla każdego kota
+    objects_collected = 0
+    time = 7200
+    center_x, center_y = (len(arr[0]) // 2, len(arr[0]) // 2)
+    cat_location = [center_x, center_y]
+    visited = np.zeros_like(arr, dtype=bool)
+    visited[cat_location[0], cat_location[1]] = True
+    q = Queue()
+    q.put(cat_location)
+    
     cat_instance = next(cat for cat in [Luna, Ariana, Dante] if cat.name == cat_name)
-    Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object], visited_paths)
+    Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object], visited_paths, objects_collected, time, cat_location, visited, q, center_x, center_y)
 
 
     

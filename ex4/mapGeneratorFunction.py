@@ -30,17 +30,10 @@ def map_generator(map_size, objects):
 def calculate_distance(point1, point2):
     return np.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
 
-def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths):
+def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, objects_collected, time, cat_location, visited, q, center_x, center_y):
     # Set the initial position of the cat at the center of the map
-    center_x, center_y = (len(arr[0]) // 2, len(arr[0]) // 2)
     arr[center_x, center_y] = cat_name
-    objects_collected = 0
     objects_score = 0
-    time = 7200
-    temporary_time = 0
-
-    # Initialize the current location of the cat
-    cat_location = [center_x, center_y]
 
     # Create a boolean array to track visited locations
     visited = np.zeros_like(arr, dtype=bool)
@@ -103,23 +96,23 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths):
                     # Cat returns home after collecting 5 objects
                     print(f"{cat_name} collected {objects_collected} objects and is returning home.")
                     
-                    if time > 0 and temporary_time <= time:
-                        while cat_location != [center_x, center_y]:
-                            if cat_location[0] > center_x:
-                                cat_location[0] -= 1
-                                time -= 0.01
-                            elif cat_location[0] < center_x:
-                                    cat_location[0] += 1
-                                    time -= 0.01
-
-                            if cat_location[1] > center_y:
-                                cat_location[1] -= 1
-                                time -= 0.01
-                            elif cat_location[1] < center_y:
-                                cat_location[1] += 1
-                                time -= 0.01
-                                
-                        objects_collected = 0
-                        arr[cat_location[0], cat_location[1]] = "0"  # Remove the cat from the last position
+                    # Move the cat back to the center of the map
+                    while cat_location != [center_x, center_y] and time > 0:
+                        if cat_location[0] > center_x:
+                            cat_location[0] -= 1
+                            time -= 0.01
+                        elif cat_location[0] < center_x:
+                            cat_location[0] += 1
+                            time -= 0.01
+                
+                        if cat_location[1] > center_y:
+                            cat_location[1] -= 1
+                            time -= 0.01
+                        elif cat_location[1] < center_y:
+                            cat_location[1] += 1
+                            time -= 0.01
+                    
+                    objects_collected = 0
+                    arr[cat_location[0], cat_location[1]] = "0"  # Remove the cat from the last position
                         
     
