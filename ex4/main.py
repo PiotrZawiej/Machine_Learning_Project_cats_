@@ -17,7 +17,7 @@ Ariana = cat("Ariana", "rock")
 Dante = cat("Dante", "mouse")
 
 cats = [Luna.name, Ariana.name, Dante.name]
-objects = {"rock":20,"snail":9, "mouse":8, "leaf":30, "fildmouse":15}
+objects = {"rock":200,"snail":90, "mouse":80, "leaf":300, "fildmouse":150}
 
 
 arr = map_generator(50, objects)
