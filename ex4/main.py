@@ -36,7 +36,7 @@ for cat_name in cats:
     q.put(cat_location)
     
     cat_instance = next(cat for cat in [Luna, Ariana, Dante] if cat.name == cat_name)
-    Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object], visited_paths, objects_collected, time, cat_location, visited, q, center_x, center_y)
+    print(Hunting(cat_instance.name, cat_instance.best_object, arr, objects[cat_instance.best_object], visited_paths, objects_collected, time, cat_location, visited, q, center_x, center_y) + "\n")
 
 
     
