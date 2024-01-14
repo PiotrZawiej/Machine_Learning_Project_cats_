@@ -30,11 +30,13 @@ def map_generator(map_size, objects):
 def calculate_distance(point1, point2):
     return np.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
 
+    
 def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, objects_collected, time, cat_location, visited, q, center_x, center_y):
     # Set the initial position of the cat at the center of the map
     arr[center_x, center_y] = cat_name
     objects_score = 0
-
+    path = []
+    
     # Create a boolean array to track visited locations
     visited = np.zeros_like(arr, dtype=bool)
     visited[cat_location[0], cat_location[1]] = True
@@ -52,7 +54,6 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, object
         # Iterate over neighbors (up, down, left, right)
         for neighbor in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             new_location = (current_location[0] + neighbor[0], current_location[1] + neighbor[1])
-            time -= 0.01
 
             # Check if the new location is within the map boundaries and has not been visited
             if 0 <= new_location[0] < len(arr) and 0 <= new_location[1] < len(arr[0]) and not visited[new_location[0], new_location[1]]:
@@ -62,11 +63,13 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, object
                 if object_at_location in fav_objects:
                     objects_collected += 1
                     objects_score += 1
-                    print(f"{cat_name} collected an object")
+                    
+                    path.append(current_location);
 
                     # Move the cat to the new location
                     arr[current_location[0], current_location[1]] = "0"  # Remove the cat from the previous position
                     arr[new_location[0], new_location[1]] = cat_name  # Move the cat to the new position
+                    time -= 100
 
                     # Update the current location of the cat
                     cat_location = [new_location[0], new_location[1]]
@@ -94,7 +97,6 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, object
                 
                 if objects_collected == 5:
                     # Cat returns home after collecting 5 objects
-                    print(f"{cat_name} collected {objects_collected} objects and is returning home.")
                     
                     # Move the cat back to the center of the map
                     while cat_location != [center_x, center_y] and time > 0:
@@ -114,5 +116,6 @@ def Hunting(cat_name, fav_objects, arr, reamining_objects, visited_paths, object
                     
                     objects_collected = 0
                     arr[cat_location[0], cat_location[1]] = "0"  # Remove the cat from the last position
-                        
+                
+    return f"Path Hunting of {cat_name}: {path}\n{cat_name} got: {objects_score} {fav_objects}";              
     
